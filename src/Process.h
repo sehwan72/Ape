@@ -2,23 +2,25 @@
 #define __PROCESS_
 
 #include <iostream>
+#include <signal.h>
+#include <unistd.h>
 
 class Process 
 {
     private:
         // Private data members and functions
+    	pid_t pid;
 
     public:
         // Public data members and functions
-        Process();
+        Process(pid_t);
 
         // Process Monitoring
         
-
-
-        // Process Management
         
+        // Process Management
+        int sendSignal(int);
 
-}
+};
 
 #endif
