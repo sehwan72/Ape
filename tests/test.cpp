@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include "../src/Process.h"
+#include "../src/Sys.h"
 
 int initTest();
 int sendSignal();
+int sysTest();
 
 int main()
 {
     initTest();
+    sysTest();
     sendSignal();
 }
 
@@ -22,4 +25,10 @@ int initTest() {
 
     printf("initTest\tSUCCESS\n");
     return 0;
+}
+
+int sysTest() {
+    Sys s = Sys();
+    s.setTotalTime();
+    printf("Total sys cpu time: %lu\n", s.getTotalTime());
 }

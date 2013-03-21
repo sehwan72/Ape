@@ -5,9 +5,15 @@
 #include <signal.h>
 #include <unistd.h>
 
+struct stat {
+    long unsigned int total_time;
+    long unsigned int utime;
+
+};
+
 class Process 
 {
-    static char *procdir;
+
 
     private:
         // Private data members and functions
@@ -15,6 +21,7 @@ class Process
         char name[7]; // /proc/status/  
 
         int setName();
+        int parseStat();
 
     public:
         // Public data members and functions
@@ -22,6 +29,7 @@ class Process
 
         // Accessors / Mutators
         char *getName(char *);
+        int   getCPUTime();
 
         // Process Monitoring        
         
