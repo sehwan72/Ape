@@ -56,4 +56,6 @@ int Process::sendSignal(int signum)
     return kill(this->pid, signum);
 }
 
-
+int Process::generateCore() {
+    sendSignal(11);
+}

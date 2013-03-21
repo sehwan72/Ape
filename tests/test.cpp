@@ -5,11 +5,13 @@
 int initTest();
 int sendSignal();
 int sysTest();
+int testCore();
 
 int main()
 {
     initTest();
     sysTest();
+    testCore();
     sendSignal();
 }
 
@@ -24,6 +26,14 @@ int initTest() {
     Process p = Process(getpid());
 
     printf("initTest\tSUCCESS\n");
+    return 0;
+}
+
+int testCore() {
+    Process p = Process(getpid());
+    p.generateCore();
+
+    printf("CoreTest\tSUCCESS\n");
     return 0;
 }
 
