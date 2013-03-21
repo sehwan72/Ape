@@ -1,8 +1,16 @@
 CC = g++
 FLAGS = -Wall -WError
 
-SRCDIR = "../src"
-OBJECTS = $(SRCDIR)/Process.cpp
+SRCDIR = ../src
+BINDIR = ../bin
+TESTDIR = $(BINDIR)/tests
+OBJECTS = Process.o
 
-sigtest:
-	$(CC) -o sigtest sendSignal.cpp $(OBJECTS)
+all: test.cpp $(OBJECTS)
+	$(CC) -o $(TESTDIR)/all $(OBJECTS) test.cpp
+
+Process.o: $(SRCDIR)/Process.cpp
+	$(CC) -c $(SRCDIR)/Process.cpp
+
+clean:
+	rm *.o

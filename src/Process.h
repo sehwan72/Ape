@@ -12,13 +12,18 @@ class Process
     private:
         // Private data members and functions
         pid_t pid;
+        char name[7]; // /proc/status/  
+
+        int setName();
 
     public:
         // Public data members and functions
         Process(pid_t);
 
-        // Process Monitoring
-        
+        // Accessors / Mutators
+        char *getName(char *);
+
+        // Process Monitoring        
         
         // Process Management
         int sendSignal(int);
