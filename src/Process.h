@@ -8,13 +8,10 @@
 struct stat {
     long unsigned int total_time;
     long unsigned int utime;
-
 };
 
 class Process 
 {
-
-
     private:
         // Private data members and functions
         pid_t pid;

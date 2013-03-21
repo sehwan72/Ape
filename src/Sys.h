@@ -3,13 +3,11 @@
 
 class Sys 
 {
-    
-
     private:
         unsigned long int totalTime;
 
     public:
-		static char *procdir;
+        static char *procdir;
 
         Sys();
         void setTotalTime();
