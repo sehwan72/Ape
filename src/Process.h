@@ -5,17 +5,13 @@
 #include <signal.h>
 #include <unistd.h>
 
-struct stat {
-    long unsigned int total_time;
-    long unsigned int utime;
-};
-
 class Process 
 {
     private:
         // Private data members and functions
         pid_t pid;
-        char name[7]; // /proc/status/  
+        char name[7]; // /proc/pid/status/  
+
 
         int setName();
         int parseStat();
@@ -32,7 +28,7 @@ class Process
         
         // Process Management
         int sendSignal(int);
-
+        int generateCore();
 };
 
 #endif
