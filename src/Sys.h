@@ -10,7 +10,7 @@ class Sys
         static char *procdir;
 
         Sys();
-        void setTotalTime();
+        int setTotalTime();
         unsigned long int getTotalTime();
 };
 
