@@ -7,9 +7,11 @@
 
 class Process 
 {
+    static char *procdir;
+
     private:
         // Private data members and functions
-    	pid_t pid;
+        pid_t pid;
 
     public:
         // Public data members and functions

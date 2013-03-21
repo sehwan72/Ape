@@ -1,5 +1,8 @@
 #include "Process.h"
 
+// Set process directory
+char *Process::procdir = "/proc";
+
 
 // Default constructor for class Process
 Process::Process(pid_t pid) 
