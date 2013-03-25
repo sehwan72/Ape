@@ -13,14 +13,20 @@ Process::Process(pid_t pid)
     this->pid = pid;
 
     // Get constant fields out of /proc
-    this->setName();    
+    this->setName();   
+
+    // Set initial cpu time
+    this->u_cpu = 0L;
+    this->s_cpu = 0L;
+    this->last_cpu = Sys::getTotalTime();
+    this->updateStat();
 }
 
 // Process Initialization
 int Process::setName()
 {
     FILE *procfd;
-    char procfile[80];  // TODO: This is a hack, malloc this
+    char procfile[20];
 
     snprintf(procfile, sizeof procfile, "%s/%d/status", 
         Sys::procdir, (int)this->pid);
@@ -34,21 +40,85 @@ int Process::setName()
     fseek(procfd, NAME_OFFSET, SEEK_SET);
     fscanf(procfd, "%s", this->name);
     fclose(procfd);
-
-#if DEBUG
-    printf("Finished init\n");
-    printf("Name: %s\n", this->name);
-#endif
 }
-
-// Get utime jiffies from /proc/pid/stat
-int Process::parseStat() 
-{
-
-}
-
 
 // Process Monitoring
+void Process::printStat() {
+    printf("Statistics for `%s`:\n"
+           "--------------------\n"
+           "pid:      %d\n"
+           "exe:      %s\n"
+           "state:    %c\n"
+           "ppid:     %d\n"
+           "pgrp:     %d\n"
+           "sid:      %d\n"
+           "tty_nr:   %d\n"
+           "tty_pgrp: %d\n"
+           "flags:    %d\n"
+           "min_flt:  %d\n"
+           "cmin_flt: %d\n"
+           "maj_flt:  %d\n"
+           "cmaj_flt: %d\n"
+           "utime:    %lu\n"
+           "stime:    %lu\n"
+           "cutime:   %lu\n"
+           "cstime:   %lu\n\n",
+            name,
+            stat.pid,      stat.name,    stat.state,    stat.ppid, 
+            stat.pgrp,     stat.sid,     stat.tty_nr,   stat.tty_pgrp, 
+            stat.flags,    stat.min_flt, stat.cmin_flt, stat.maj_flt, 
+            stat.cmaj_flt, stat.utime,   stat.stime,    stat.cutime, 
+            stat.cstime
+           );
+}
+
+void Process::setCPUUsage() 
+{
+    unsigned long int old_utime,
+        old_stime,
+        old_cpu_time;
+
+    old_utime = stat.utime;
+    old_stime = stat.stime;
+    old_cpu_time = last_cpu;
+    this->last_cpu = Sys::getTotalTime();
+    
+    this->updateStat();
+
+    unsigned long int time = this->last_cpu - old_cpu_time;
+    printf("SYS_TIME: %lu\n", time);
+
+    if (time == 0)
+        return;
+
+    this->u_cpu = 100 * (stat.utime - old_utime) / (this->last_cpu - old_cpu_time);
+    this->s_cpu = 100 * (stat.stime - old_stime) / (this->last_cpu - old_cpu_time);
+}
+
+void Process::updateStat() 
+{
+    FILE *procfd;
+    char procfile[80];  // TODO: This is a hack, malloc this
+
+    snprintf(procfile, sizeof procfile, "%s/%d/stat", 
+        Sys::procdir, (int)this->pid);
+    
+    procfd = fopen(procfile,"r");
+    if (procfd == NULL) {
+        perror("fopen error");
+        return;
+    }
+
+    fscanf(procfd, 
+        "%d %s %c %d %d %d %d %d %d %d %d %d %d %lu %lu %lu %lu",
+        &stat.pid,       stat.name,    &stat.state,    &stat.ppid, 
+        &stat.pgrp,     &stat.sid,     &stat.tty_nr,   &stat.tty_pgrp, 
+        &stat.flags,    &stat.min_flt, &stat.cmin_flt, &stat.maj_flt, 
+        &stat.cmaj_flt, &stat.utime,   &stat.stime,    &stat.cutime, 
+        &stat.cstime
+        );
+    fclose(procfd);
+}
 
 // Process Management
 int Process::sendSignal(int signum)
@@ -56,6 +126,8 @@ int Process::sendSignal(int signum)
     return kill(this->pid, signum);
 }
 
+// *Note* - This currently will halt execution 
+// of the process
 int Process::generateCore() {
     sendSignal(11);
 }
