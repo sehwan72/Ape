@@ -26,6 +26,17 @@ typedef struct {
     unsigned long int stime;  // Time in kernel mode
     unsigned long int cutime; // Time in user mode with children
     unsigned long int cstime; // Time in kernel mode with children
+
+    int priority;      // Process priority
+    int niceness;      // Niceness
+    int threads;       // Thread count
+    int O;             // Zero field
+    unsigned long int start_time; // Start time from boot in nanoseconds
+
+    // Memory usage
+    unsigned long int vss;  // Virtual memory usage in pages
+    unsigned long int rss;        // Resident memory usage in pages
+
 } stat_t;
 
 class Process 
@@ -38,7 +49,6 @@ class Process
         unsigned long int last_cpu;
 
         int setName();
-        void updateStat();
 
     public:
         unsigned long int u_cpu; // User space cpu usage
@@ -48,12 +58,14 @@ class Process
         Process(pid_t);
 
         // Accessors / Mutators
-        char *getName(char *);
-        int   getCPUTime();
+        char   *getName(char *);
+        int     getCPUTime();
+        stat_t *getStatPtr();
 
         // Process Monitoring        
         void printStat();
         void setCPUUsage();
+        void updateStat();
 
         // Process Management
         int sendSignal(int);

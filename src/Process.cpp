@@ -42,6 +42,11 @@ int Process::setName()
     fclose(procfd);
 }
 
+stat_t *Process::getStatPtr()
+{
+    return &this->stat;
+}
+
 // Process Monitoring
 void Process::printStat() {
     printf("Statistics for `%s`:\n"
@@ -62,13 +67,21 @@ void Process::printStat() {
            "utime:    %lu\n"
            "stime:    %lu\n"
            "cutime:   %lu\n"
-           "cstime:   %lu\n\n",
+           "cstime:   %lu\n"
+           "priority: %d\n"
+           "niceness: %d\n"
+           "threads:  %d\n"
+           "start:    %lu\n"
+           "vss:      %lu\n"
+           "rss:      %lu\n"
+           "\n",
             name,
-            stat.pid,      stat.name,    stat.state,    stat.ppid, 
-            stat.pgrp,     stat.sid,     stat.tty_nr,   stat.tty_pgrp, 
-            stat.flags,    stat.min_flt, stat.cmin_flt, stat.maj_flt, 
-            stat.cmaj_flt, stat.utime,   stat.stime,    stat.cutime, 
-            stat.cstime
+            stat.pid,        stat.name,     stat.state,    stat.ppid, 
+            stat.pgrp,       stat.sid,      stat.tty_nr,   stat.tty_pgrp, 
+            stat.flags,      stat.min_flt,  stat.cmin_flt, stat.maj_flt, 
+            stat.cmaj_flt,   stat.utime,    stat.stime,    stat.cutime, 
+            stat.cstime,     stat.priority, stat.niceness, stat.threads,
+            stat.start_time, stat.vss,      stat.rss
            );
 }
 
@@ -110,12 +123,13 @@ void Process::updateStat()
     }
 
     fscanf(procfd, 
-        "%d %s %c %d %d %d %d %d %d %d %d %d %d %lu %lu %lu %lu",
-        &stat.pid,       stat.name,    &stat.state,    &stat.ppid, 
-        &stat.pgrp,     &stat.sid,     &stat.tty_nr,   &stat.tty_pgrp, 
-        &stat.flags,    &stat.min_flt, &stat.cmin_flt, &stat.maj_flt, 
-        &stat.cmaj_flt, &stat.utime,   &stat.stime,    &stat.cutime, 
-        &stat.cstime
+        "%d %s %c %d %d %d %d %d %d %d %d %d %d %lu %lu %lu %lu %d %d %d %*s %lu %lu %lu",
+        &stat.pid,        stat.name,      &stat.state,    &stat.ppid, 
+        &stat.pgrp,       &stat.sid,      &stat.tty_nr,   &stat.tty_pgrp, 
+        &stat.flags,      &stat.min_flt,  &stat.cmin_flt, &stat.maj_flt, 
+        &stat.cmaj_flt,   &stat.utime,    &stat.stime,    &stat.cutime, 
+        &stat.cstime,     &stat.priority, &stat.niceness, &stat.threads,
+        &stat.start_time, &stat.vss,      &stat.rss
         );
     fclose(procfd);
 }

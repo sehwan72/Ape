@@ -7,6 +7,7 @@ class Sys
 {
     private:
         unsigned long int totalTime;
+        unsigned long int pageSize;
 
     public:
         static char *procdir;
