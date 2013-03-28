@@ -53,8 +53,8 @@ class Process
         int setName();
 
     public:
-        unsigned long int u_cpu; // User space cpu usage
-        unsigned long int s_cpu; // Kernel space cpu usage
+        double u_cpu; // User space cpu usage
+        double s_cpu; // Kernel space cpu usage
         
         // Public data members and functions
         Process(pid_t);
