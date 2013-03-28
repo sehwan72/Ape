@@ -8,7 +8,7 @@ TESTDIR = $(BINDIR)/tests
 OBJECTS = Process.o Sys.o Ape.o
 
 all: test.cpp $(OBJECTS)
-	$(CC) -o $(TESTDIR)/all $(OBJECTS) test.cpp
+	$(CC) -o $(TESTDIR)/all $(OBJECTS) test.cpp -lncurses
 
 Process.o: $(SRCDIR)/Process.cpp
 	$(CC) $(DEBUGFLAGS) -c $(SRCDIR)/Process.cpp
