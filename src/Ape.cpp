@@ -26,6 +26,8 @@ Ape::Ape()
         if (entry != 0)
             this->upsertProcess(entry);
     }
+    
+    closedir(dir);
 }
 
 Ape::~Ape()
@@ -73,11 +75,25 @@ void Ape::printProcesses(SortBy s)
 {
     this->sort(s);
     int i, j;
+    
+    printf("USER\tPID\t%CPU\tVSZ\tRSS\tTTY\tSTAT\tSTART\tCOMMAND\n");
     for (i = 0, j = this->processList.size(); i < j; ++i) {
-        printf("%20s::%d\t(#):%d\n", 
-                (*processList[i])->getStatPtr()->name,
-                (*processList[i])->getStatPtr()->pid,
-                i
-                );
+        stat_t *stat = (*processList[i])->getStatPtr();
+        printf("%s\t%d\t%d\t%lu\t%lu\t%d\t%c\t%lu\t%s\n",
+            "tim",
+            stat->pid,
+            (*processList[i])->u_cpu,
+            stat->vss,
+            stat->rss,
+            stat->tty_nr,
+            stat->state,
+            stat->start_time,
+            stat->name
+            );
+        //printf("%20s::%d\t(#):%d\n", 
+        //        (*processList[i])->getStatPtr()->name,
+        //        (*processList[i])->getStatPtr()->pid,
+        //        i
+        //        );
     }
 }

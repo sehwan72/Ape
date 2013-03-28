@@ -1,6 +1,8 @@
 #ifndef __PROCESS_
 #define __PROCESS_
 
+#include <vector>
+
 #include <iostream>
 #include <signal.h>
 #include <unistd.h>
@@ -61,6 +63,7 @@ class Process
         char   *getName(char *);
         int     getCPUTime();
         stat_t *getStatPtr();
+        int     getOpenFiles(std::vector<char *> *);
 
         // Process Monitoring        
         void printStat();
