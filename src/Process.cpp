@@ -1,4 +1,12 @@
+#include <string>
+#include <strings.h>
+#include <string.h>
+
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <errno.h>
 
 #include "Process.h"
 #include "Sys.h"
@@ -144,4 +152,39 @@ int Process::sendSignal(int signum)
 // of the process
 int Process::generateCore() {
     sendSignal(11);
+}
+
+int Process::getOpenFiles(std::vector<char *> *fileList)
+{
+    char path[80];
+    struct dirent *direntry;
+    char *end;
+    unsigned long int entry;
+    char *symbolicLink;
+    
+    snprintf(path, sizeof(path), "%s/%d/fd", Sys::procdir, this->pid);
+    DIR *dir = opendir(path);
+    if (dir == NULL) {
+        perror("opendir failure");
+        return -1;
+    }
+    
+    int fd, r;
+    while ((direntry = readdir(dir)) != NULL) {
+        std::string str(direntry->d_name);
+        
+        if ((str.find_first_not_of( "0123456789" )) != std::string::npos) continue;
+        
+        symbolicLink = (char *)malloc(80);
+        bzero(symbolicLink, 80);
+        snprintf(path, sizeof(path), "%s/%d/%s", Sys::procdir, this->pid, direntry->d_name);
+        r = readlink(path, symbolicLink, 79);
+        printf("%s -> ", (r < 0) ? strerror(errno) : "0");
+        printf("%s -> %s\n", path, symbolicLink);
+        fileList->push_back(symbolicLink);
+    }
+    
+    closedir(dir);
+    
+    return 0;
 }

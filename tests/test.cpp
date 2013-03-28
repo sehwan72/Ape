@@ -10,6 +10,7 @@ int testCore();
 int procStatTest();
 int procCPUTest();
 int apeTest();
+int fileTest();
 
 int main()
 {
@@ -18,8 +19,24 @@ int main()
     sysTest();
     procStatTest();
     procCPUTest();
+    fileTest();
     //testCore();
     //sendSignal();
+}
+
+int fileTest()
+{
+    Process p = Process(19710);
+    std::vector<char *> fileList;
+    p.getOpenFiles(&fileList);
+    int i, j;
+    
+    
+    printf("\n%d open files for current process: \n", fileList.size());
+    for (i = 0, j = fileList.size(); i < j; ++i) {
+        printf("%s\n", fileList[i]);
+    }
+    printf("\n");
 }
 
 int apeTest()
