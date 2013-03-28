@@ -21,6 +21,8 @@ class Ape
         ~Ape();
         Ape();
 
+        void update();
+
         int upsertProcess(pid_t);
         int removeProcess();
 

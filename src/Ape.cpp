@@ -1,5 +1,7 @@
 #include <algorithm>
 
+
+#include <curses.h>
 #include <stdlib.h> // strtol
 #include <dirent.h>
 
@@ -8,26 +10,7 @@
 Ape::Ape()
 {
     this->system = new Sys();
-
-    // Iterate through /proc, read every directory
-    // that represents a process, and add the
-    // corresponding Process to map and vector
-    struct dirent *direntry;
-    DIR *dir = opendir(Sys::procdir);
-    if (dir == NULL) {
-        perror("opendir failure");
-        return;
-    }
-    
-    char *end;
-    unsigned long int entry;
-    while ((direntry = readdir(dir)) != NULL) {
-        entry = strtol(direntry->d_name, &end, 10);
-        if (entry != 0)
-            this->upsertProcess(entry);
-    }
-    
-    closedir(dir);
+    this->update();
 }
 
 Ape::~Ape()
@@ -52,7 +35,8 @@ int Ape::upsertProcess(pid_t pid)
     } else {
         
         // Otherwise, update
-        processMap[pid]->updateStat();
+        //processMap[pid]->updateStat();
+        processMap[pid]->setCPUUsage();
     }
 }
 
@@ -66,9 +50,39 @@ void Ape::sort(SortBy s)
             break;
     }
     
-    std::sort(this->processList.begin(), 
-              this->processList.end(),
-              comp);
+    std::stable_sort(this->processList.begin(), 
+                     this->processList.end(),
+                     comp);
+}
+
+void Ape::update() 
+{
+    // Iterate through /proc, read every directory
+    // that represents a process, and add the
+    // corresponding Process to map and vector
+    struct dirent *direntry;
+    DIR *dir = opendir(Sys::procdir);
+    if (dir == NULL) {
+        perror("opendir failure");
+        return;
+    }
+    
+    char *end;
+    unsigned long int entry;
+    while ((direntry = readdir(dir)) != NULL) {
+        entry = strtol(direntry->d_name, &end, 10);
+        if (entry != 0)
+            this->upsertProcess(entry);
+    }
+    
+    closedir(dir);
+    
+    /*int i, j;
+    for (i = 0, j = this->processList.size(); i < j; ++i) {
+        //(*processList[i])->setCPUUsage();
+        //(*processList[i])->u_cpu = j - i;
+        //(*processList[i])->setCPUUsage();
+    }*/
 }
 
 void Ape::printProcesses(SortBy s) 
@@ -76,13 +90,18 @@ void Ape::printProcesses(SortBy s)
     this->sort(s);
     int i, j;
     
-    printf("USER\tPID\t%CPU\tVSZ\tRSS\tTTY\tSTAT\tSTART\tCOMMAND\n");
+    printw("USER\tPID\tU_CPU\tS_CPU\tVSZ\tRSS\tTTY\tSTAT\tSTART\tCOMMAND\n\n");
     for (i = 0, j = this->processList.size(); i < j; ++i) {
         stat_t *stat = (*processList[i])->getStatPtr();
-        printf("%s\t%d\t%d\t%lu\t%lu\t%d\t%c\t%lu\t%s\n",
+        if (((*processList[i])->u_cpu + (*processList[i])->s_cpu == 0) && 
+                ((*processList[i])->s_cpu == 0)) 
+            continue;
+
+        printw("%s\t%d\t%.1f\t%.1f\t%lu\t%lu\t%d\t%c\t%lu\t%s\n",
             "tim",
             stat->pid,
-            (*processList[i])->u_cpu,
+            ((*processList[i])->u_cpu + (*processList[i])->s_cpu),
+            (*processList[i])->s_cpu,
             stat->vss,
             stat->rss,
             stat->tty_nr,
@@ -96,4 +115,5 @@ void Ape::printProcesses(SortBy s)
         //        i
         //        );
     }
+    refresh();
 }

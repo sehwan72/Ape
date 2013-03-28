@@ -109,11 +109,14 @@ void Process::setCPUUsage()
     unsigned long int time = this->last_cpu - old_cpu_time;
     printf("SYS_TIME: %lu\n", time);
 
-    if (time == 0)
+    if (time == 0) {
+        this->u_cpu= 999;
         return;
+    }
 
-    this->u_cpu = 100 * (stat.utime - old_utime) / (this->last_cpu - old_cpu_time);
-    this->s_cpu = 100 * (stat.stime - old_stime) / (this->last_cpu - old_cpu_time);
+    this->u_cpu = 100 * (stat.utime - old_utime) / (time);
+    this->s_cpu = 100 * (stat.stime - old_stime) / (time);
+    //this->u_cpu = random(100);
 }
 
 void Process::updateStat() 

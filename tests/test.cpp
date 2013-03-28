@@ -1,3 +1,4 @@
+#include <curses.h>
 #include <stdio.h>
 #include "../src/Ape.h"
 #include "../src/Process.h"
@@ -14,14 +15,30 @@ int fileTest();
 
 int main()
 {
-    apeTest();
-    initTest();
-    sysTest();
-    procStatTest();
+    Ape a = Ape();
+    
+    initscr();
+    clear();
+    refresh();
+
+    while (1) {
+        a.update();
+        a.printProcesses(CPU);
+        //usleep(500 * 1000);
+        sleep(1);
+        clear();
+        //refresh();
+    }
+    endwin();
+
+    //initTest();
+    //sysTest();
+    //procStatTest();
     procCPUTest();
-    fileTest();
+    //fileTest();
     //testCore();
     //sendSignal();
+    //getchar();
 }
 
 int fileTest()
@@ -52,7 +69,7 @@ int apeTest()
 
 int procCPUTest()
 {
-    Process p = Process(getpid());
+    Process p = Process(1049);
     //p.updateStat();
     p.setCPUUsage();
     printf("u_cpu: %lu\n"
