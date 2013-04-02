@@ -107,7 +107,7 @@ void Process::setCPUUsage()
     this->updateStat();
 
     unsigned long int time = this->last_cpu - old_cpu_time;
-    printf("SYS_TIME: %lu\n", time);
+    //printf("SYS_TIME: %lu\n", time);
 
     if (time == 0) {
         this->u_cpu= 999;
