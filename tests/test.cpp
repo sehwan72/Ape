@@ -1,4 +1,4 @@
-#include <curses.h>
+//#include <curses.h>
 #include <stdio.h>
 #include "../src/Ape.h"
 #include "../src/Process.h"
@@ -17,19 +17,19 @@ int main()
 {
     Ape a = Ape();
     
-    initscr();
-    clear();
-    refresh();
+//    initscr();
+//    clear();
+//    refresh();
 
     while (1) {
         a.update();
         a.printProcesses(CPU);
         //usleep(500 * 1000);
         sleep(1);
-        clear();
+//        clear();
         //refresh();
     }
-    endwin();
+//    endwin();
 
     //initTest();
     //sysTest();
