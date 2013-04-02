@@ -17,3 +17,14 @@ Ape
 * ~~Update all processes, getting new u_cpu and s_cpu for each~~
 * ~~Sort all processes based on CPU usage~~
 * Remove processes that have finished execution (no longer in /proc) when updating
+
+GUI
+---
+* Processes displaying in a table, sorted by CPU usage
+* Processes updating CPU usage, and maintaining sorted order when displayed
+* Ability to select a Process from the table and view more information (information in stat_t)
+* Send signals to a process (maybe quick keys for common signals, SIGINT, SIGQUIT, SIGTERM, etc)
+* Display open files for process
+* Trigger and display core dump for selected process
+* Display memory map for selected process
+* ...
