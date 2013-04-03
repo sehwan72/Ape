@@ -57,7 +57,7 @@ int Process::wasUpdated()
     return 0;
 }
 
-int Process::getMemoryMap(char *buffer)
+int Process::getMemoryMap(char **buffer, int buf_size)
 {
     char mappath[20];
     int fd;
@@ -71,10 +71,8 @@ int Process::getMemoryMap(char *buffer)
         return -1;
     }
 
-    bzero(buffer, sizeof buffer);
-    read(fd, buffer, sizeof buffer);
-    
-    printf(buffer);
+    bzero(*buffer, buf_size);
+    read(fd, *buffer, buf_size);
     close(fd);
 }
 
