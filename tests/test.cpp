@@ -22,21 +22,21 @@ int main()
 
     // Loop test
     
-    Ape a = Ape();
-    a.update();
-    return 0;
+    //Ape a = Ape();
+    //a.update();
+    //return 0;
 
 
-    while (1) {
-        printf("\n");
-        a.update();
-        a.printProcesses(CPU);
-        usleep(500 * 1000);
-    }
+    //while (1) {
+    //    printf("\n");
+    //    a.update();
+    //    a.printProcesses(CPU);
+    //    usleep(500 * 1000);
+    //}
     
 
     //removeTest();
-    //mapTest();
+    mapTest();
     //initTest();
     //sysTest();
     //procStatTest();
@@ -60,9 +60,9 @@ int mapTest()
 {
     char* maps = (char *) malloc (1024 * 100);
     Process p = Process(getpid());
-    p.getMemoryMap(maps);
+    p.getMemoryMap(&maps, 1024 * 100);
 
-    printf("\n\n");
+    printf("\nafter:\n");
     printf("%s\n", maps);
     free(maps);
 }

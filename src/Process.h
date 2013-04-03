@@ -70,7 +70,7 @@ class Process
         void printStat();
         int setCPUUsage();
         int updateStat();
-        int  getMemoryMap(char *);
+        int  getMemoryMap(char **, int);
 
         // Process Management
         int sendSignal(int);
