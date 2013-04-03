@@ -1,6 +1,11 @@
 Console
 =======
 
+Optimization
+------------
+* ~~Fixed all memory leaks~~
+* Possible way of removing `defunct` processes that is faster than twice linear
+
 Process
 -------
 * ~~Create single process~~
@@ -16,7 +21,7 @@ Ape
 * ~~Instantiate a Process for every process dir in /proc~~
 * ~~Update all processes, getting new u_cpu and s_cpu for each~~
 * ~~Sort all processes based on CPU usage~~
-* Remove processes that have finished execution (no longer in /proc) when updating
+* ~~Remove processes that have finished execution (no longer in /proc) when updating~~
 
 GUI
 ---
