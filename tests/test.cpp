@@ -23,11 +23,15 @@ int main()
     // Loop test
     
     Ape a = Ape();
+    a.update();
+    return 0;
+
+
     while (1) {
         printf("\n");
         a.update();
         a.printProcesses(CPU);
-        sleep(1);
+        usleep(500 * 1000);
     }
     
 
@@ -59,7 +63,7 @@ int mapTest()
     p.getMemoryMap(maps);
 
     printf("\n\n");
-    printf(maps);
+    printf("%s\n", maps);
     free(maps);
 }
 
@@ -94,23 +98,23 @@ int procCPUTest()
     Process p = Process(1049);
     //p.updateStat();
     p.setCPUUsage();
-    printf("u_cpu: %lu\n"
-           "s_cpu: %lu\n",
+    printf("u_cpu: %f\n"
+           "s_cpu: %f\n",
             p.u_cpu,
             p.s_cpu
            );
     //p.updateStat();
     sleep(1);
     p.setCPUUsage();
-    printf("u_cpu: %lu\n"
-           "s_cpu: %lu\n",
+    printf("u_cpu: %f\n"
+           "s_cpu: %f\n",
             p.u_cpu,
             p.s_cpu
            );
     sleep(1);
     p.setCPUUsage();
-    printf("u_cpu: %lu\n"
-           "s_cpu: %lu\n",
+    printf("u_cpu: %f\n"
+           "s_cpu: %f\n",
             p.u_cpu,
             p.s_cpu
            );

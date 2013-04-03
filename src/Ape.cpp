@@ -15,9 +15,12 @@ Ape::Ape()
 
 Ape::~Ape()
 {
-    // TODO: iterate(?) through processMap and delete
-    //       all entries
+    // Delete all Processes
+    std::map<int, Process *>::iterator it;
+    for (it = processMap.begin(); it != processMap.end(); ++it)
+        this->removeProcess(it->second->getStatPtr()->pid);
 
+    // Delete Sys instantiation
     delete this->system;
 }
 
@@ -26,7 +29,7 @@ int Ape::removeProcess(pid_t pid)
     // Remove link from vector
     int i, j;
     for (i = 0, j = processList.size(); i < j; ++i)
-        if ((*processList[i])->getStatPtr()->pid == pid)
+        if ((*processList[i])->pid == pid)
             break;
 
     if (i == j) return -1; // Process not found
@@ -120,7 +123,7 @@ int Ape::update()
     // Remove all processes that were not updated (no procfs dir)
     for (it = processMap.begin(); it != processMap.end(); ++it)
         if (it->second->wasUpdated() == false)
-            this->removeProcess(it->second->getStatPtr()->pid);
+            this->removeProcess(it->second->pid);
 
     return 0;
 }
@@ -130,7 +133,7 @@ void Ape::printProcesses(SortBy s)
     this->sort(s);
     int i, j;
     
-    printf("USER\tPID\tU_CPU\tS_CPU\tVSZ\tRSS\tTTY\tSTAT\tSTART\tCOMMAND\n\n");
+    printf("USER\tPID\tCPU\tS_CPU\tVSZ\tRSS\tTTY\tSTAT\tSTART\tCOMMAND\n\n");
     for (i = 0, j = this->processList.size(); i < j; ++i) {
         stat_t *stat = (*processList[i])->getStatPtr();
         if (((*processList[i])->u_cpu + (*processList[i])->s_cpu == 0) && 

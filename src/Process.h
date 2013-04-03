@@ -45,7 +45,6 @@ class Process
 {
     private:
         // Private data members and functions
-        pid_t  pid;
         char   name[7];  
         stat_t stat;
         unsigned long int last_cpu;
@@ -59,6 +58,7 @@ class Process
 
         // Public data members and functions
         Process(pid_t);
+        pid_t  pid;
 
         // Accessors / Mutators
         char   *getName(char *);

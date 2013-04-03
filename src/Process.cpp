@@ -20,17 +20,17 @@
 
 // Default constructor for class Process
 Process::Process(pid_t pid) 
-{    
+{   
     this->pid = pid;
 
     // Get constant fields out of /proc
-    this->setName();   
+    //this->setName();   
 
     // Set initial cpu time
     this->u_cpu = 0L;
     this->s_cpu = 0L;
     this->last_cpu = Sys::getTotalTime();
-    this->updateStat();
+    this->updated = (this->updateStat() == 0);
 }
 
 int Process::resetUpdated()
@@ -79,6 +79,8 @@ int Process::getMemoryMap(char *buffer)
 }
 
 // Process Initialization
+// not used, caused memcheck fail
+// use getStatPtr()->name instead
 int Process::setName()
 {
     FILE *procfd;
@@ -185,7 +187,7 @@ int Process::updateStat()
     // Open the stat file for the Process
     procfd = fopen(procfile,"r");
     if (procfd == NULL) {
-        perror("fopen error");
+        fprintf(stderr, "fopen error: %s\n", procfile);
         return -1; // Return -1 if fopen error, this could indicate the process does not exist
     }
 
