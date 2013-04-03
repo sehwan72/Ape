@@ -1,5 +1,5 @@
 CC = g++
-FLAGS = -Wall -WError
+FLAGS = -Wall -WError -WExtra
 DEBUGFLAGS = -g
 
 SRCDIR = ../src
