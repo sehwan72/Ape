@@ -45,19 +45,20 @@ class Process
 {
     private:
         // Private data members and functions
-        pid_t  pid;
         char   name[7];  
         stat_t stat;
         unsigned long int last_cpu;
 
         int setName();
-
+        bool updated;
+        
     public:
         double u_cpu; // User space cpu usage
         double s_cpu; // Kernel space cpu usage
-        
+
         // Public data members and functions
         Process(pid_t);
+        pid_t  pid;
 
         // Accessors / Mutators
         char   *getName(char *);
@@ -67,12 +68,18 @@ class Process
 
         // Process Monitoring        
         void printStat();
-        void setCPUUsage();
-        void updateStat();
+        int setCPUUsage();
+        int updateStat();
+        int  getMemoryMap(char *);
 
         // Process Management
         int sendSignal(int);
         int generateCore();
+        
+        
+        int update();
+        int wasUpdated();
+        int resetUpdated();
 };
 
 #endif

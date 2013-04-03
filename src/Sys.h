@@ -27,7 +27,7 @@ class Sys
             
             statfd = fopen(statfile,"r");
             if (statfd == NULL) {
-                perror("fopen error");
+                fprintf(stderr, "fopen error: %s\n", procdir);
                 return -1;
             }
 

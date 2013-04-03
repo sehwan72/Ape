@@ -21,16 +21,17 @@ class Ape
         ~Ape();
         Ape();
 
-        void update();
+        int update();
 
         int upsertProcess(pid_t);
-        int removeProcess();
+        int removeProcess(pid_t);
 
         void sort(SortBy);
         void printProcesses(SortBy);
         
         static bool compareByCPU(Process **p1, Process **p2) {
-            return (*p1)->u_cpu < (*p2)->u_cpu;
+            return ((*p1)->u_cpu + (*p1)->s_cpu) < 
+                   ((*p2)->u_cpu + (*p2)->s_cpu);
         }
 };
 
