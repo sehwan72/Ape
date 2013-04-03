@@ -21,10 +21,10 @@ class Ape
         ~Ape();
         Ape();
 
-        void update();
+        int update();
 
         int upsertProcess(pid_t);
-        int removeProcess();
+        int removeProcess(pid_t);
 
         void sort(SortBy);
         void printProcesses(SortBy);
