@@ -76,6 +76,10 @@ void Ape::sort(SortBy s)
         case CPU:
             comp = Ape::compareByCPU;
             break;
+
+        case PID:
+            comp = APE::compareByPID;
+            break;
     }
     
     std::stable_sort(this->processList.begin(), 
@@ -136,9 +140,9 @@ void Ape::printProcesses(SortBy s)
     printf("USER\tPID\tCPU\tS_CPU\tVSZ\tRSS\tTTY\tSTAT\tSTART\tCOMMAND\n\n");
     for (i = 0, j = this->processList.size(); i < j; ++i) {
         stat_t *stat = (*processList[i])->getStatPtr();
-        if (((*processList[i])->u_cpu + (*processList[i])->s_cpu == 0) && 
-                ((*processList[i])->s_cpu == 0)) 
-            continue;
+        //if (((*processList[i])->u_cpu + (*processList[i])->s_cpu == 0) && 
+        //        ((*processList[i])->s_cpu == 0)) 
+        //    continue;
 
         printf("%s\t%d\t%.1f\t%.1f\t%lu\t%lu\t%d\t%c\t%lu\t%s\n",
             "tim",
@@ -152,11 +156,5 @@ void Ape::printProcesses(SortBy s)
             stat->start_time,
             stat->name
             );
-        //printf("%20s::%d\t(#):%d\n", 
-        //        (*processList[i])->getStatPtr()->name,
-        //        (*processList[i])->getStatPtr()->pid,
-        //        i
-        //        );
     }
-    //refresh();
 }
