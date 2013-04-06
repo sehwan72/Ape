@@ -41,12 +41,17 @@ typedef struct {
 
 } stat_t;
 
+typedef struct {
+    uid_t uid; // User id of process
+} status_t;
+
 class Process 
 {
     private:
         // Private data members and functions
         char   name[7];  
-        stat_t stat;
+        stat_t   stat;
+        status_t status;
         unsigned long int last_cpu;
 
         int setName();

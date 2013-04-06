@@ -22,21 +22,22 @@ int main()
 
     // Loop test
     
-    //Ape a = Ape();
+    Ape a = Ape();
     //a.update();
     //return 0;
 
 
-    //while (1) {
-    //    printf("\n");
-    //    a.update();
-    //    a.printProcesses(CPU);
-    //    usleep(500 * 1000);
-    //}
+    while (1) {
+        printf("\n");
+        a.update();
+        a.printProcesses(CPU);
+        usleep(1000 * 1000);
+        system("clear");
+    }
     
 
     //removeTest();
-    mapTest();
+    //mapTest();
     //initTest();
     //sysTest();
     //procStatTest();
