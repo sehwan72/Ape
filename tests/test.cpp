@@ -31,7 +31,9 @@ int main()
         printf("\n");
         a.update();
         a.printProcesses(CPU);
-        usleep(1000 * 1000);
+        usleep(500 * 1000);
+        a.update();
+        usleep(500 * 1000);
         system("clear");
     }
     
