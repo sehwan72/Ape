@@ -158,3 +158,19 @@ void Ape::printProcesses(SortBy s)
             );
     }
 }
+
+void Ape::sortByParent()
+{
+    std::vector<Process **> tempVector1;
+    std::vector<Process **> tempvector2;
+
+    tempVector1 = new std::vector<Process **>();
+}
+
+void Ape::addChildren(std::vector<Process **> *tempVector, unsigned long pid)
+{
+    int i, j;
+    for (i = 0, j = processList.size(); i < j; ++i) {
+        if ((*processList[i])->getStatPtr()->ppid == 
+    }
+}
