@@ -80,6 +80,10 @@ void Ape::sort(SortBy s)
         case PID:
             comp = Ape::compareByPID;
             break;
+    
+        case PPID:
+            sortByParent();
+            return;
     }
     
     std::stable_sort(this->processList.begin(), 
@@ -134,19 +138,19 @@ int Ape::update()
 
 void Ape::printProcesses(SortBy s) 
 {
-    this->sort(s);
     int i, j;
     
-    printf("USER\tPID\tCPU\tS_CPU\tVSZ\tRSS\tTTY\tSTAT\tSTART\tCOMMAND\n\n");
+    printf("USER\tPID\tPPID\tCPU\tS_CPU\tVSZ\tRSS\tTTY\tSTAT\tSTART\tCOMMAND\n\n");
     for (i = 0, j = this->processList.size(); i < j; ++i) {
         stat_t *stat = (*processList[i])->getStatPtr();
         //if (((*processList[i])->u_cpu + (*processList[i])->s_cpu == 0) && 
         //        ((*processList[i])->s_cpu == 0)) 
         //    continue;
 
-        printf("%lu\t%d\t%.1f\t%.1f\t%lu\t%lu\t%d\t%c\t%lu\t%s\n",
+        printf("%lu\t%d\t%d\t%.1f\t%.1f\t%lu\t%lu\t%d\t%c\t%lu\t%s\n",
             (*processList[i])->getStatusPtr()->uid,
             stat->pid,
+            stat->ppid,
             ((*processList[i])->u_cpu + (*processList[i])->s_cpu),
             (*processList[i])->s_cpu,
             stat->vss,
@@ -162,15 +166,28 @@ void Ape::printProcesses(SortBy s)
 void Ape::sortByParent()
 {
     std::vector<Process **> tempVector1;
-    std::vector<Process **> tempvector2;
+    std::vector<Process **> tempVector2;
 
-    tempVector1 = new std::vector<Process **>();
+    int i, j;
+    for (i = 0, j = processList.size(); i < j; ++i)
+        if ((*processList[i])->pid == 1)
+            break;
+
+    tempVector1.push_back(processList[i]);
+    addChildren(&tempVector1, (*processList[i])->pid);
+
+    tempVector2 = processList;
+    processList = tempVector1;
+    tempVector2.clear();
 }
 
-void Ape::addChildren(std::vector<Process **> *tempVector, unsigned long pid)
+void Ape::addChildren(std::vector<Process **> *tempVector, const unsigned long pid)
 {
     int i, j;
     for (i = 0, j = processList.size(); i < j; ++i) {
-        if ((*processList[i])->getStatPtr()->ppid == 
+        if ((*processList[i])->getStatPtr()->ppid == pid) {
+            tempVector->push_back(processList[i]);
+            addChildren(tempVector,(*processList[i])->pid); 
+        }
     }
 }
