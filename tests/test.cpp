@@ -30,6 +30,7 @@ int main()
     while (1) {
         printf("\n");
         a.update();
+        a.sort(PPID);
         a.printProcesses(CPU);
         usleep(500 * 1000);
         a.update();
