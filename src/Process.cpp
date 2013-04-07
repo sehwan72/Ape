@@ -30,6 +30,7 @@ Process::Process(pid_t pid)
     this->u_cpu = 0L;
     this->s_cpu = 0L;
     this->last_cpu = Sys::getTotalTime();
+    this->updateStatus();
     this->updated = (this->updateStat() == 0);
 }
 
@@ -103,6 +104,11 @@ stat_t *Process::getStatPtr()
     return &this->stat;
 }
 
+status_t *Process::getStatusPtr()
+{
+    return &this->status;
+}
+
 // Process Monitoring
 void Process::printStat() {
     printf("Statistics for `%s`:\n"
@@ -170,6 +176,34 @@ int Process::setCPUUsage()
     this->u_cpu = 100 * (stat.utime - old_utime) / (time);
     this->s_cpu = 100 * (stat.stime - old_stime) / (time);
     
+    return 0;
+}
+
+int Process::updateStatus()
+{
+    FILE *procfd;
+    char procfile[80];
+
+    snprintf(procfile, sizeof procfile, "%s/%d/status",
+            Sys::procdir, (int)this->pid);
+
+    procfd = fopen(procfile, "r");
+    if (procfd == NULL) {
+        fprintf(stderr, "fopen error: %s\n", procfile);
+        return -1;
+    }
+
+    char buf[256];
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+
+    sscanf(buf, "Uid:\t%lu", &this->status.uid);
+    fclose(procfd);
     return 0;
 }
 
