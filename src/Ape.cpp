@@ -78,7 +78,7 @@ void Ape::sort(SortBy s)
             break;
 
         case PID:
-            comp = APE::compareByPID;
+            comp = Ape::compareByPID;
             break;
     }
     
@@ -144,8 +144,8 @@ void Ape::printProcesses(SortBy s)
         //        ((*processList[i])->s_cpu == 0)) 
         //    continue;
 
-        printf("%s\t%d\t%.1f\t%.1f\t%lu\t%lu\t%d\t%c\t%lu\t%s\n",
-            "tim",
+        printf("%lu\t%d\t%.1f\t%.1f\t%lu\t%lu\t%d\t%c\t%lu\t%s\n",
+            (*processList[i])->getStatusPtr()->uid,
             stat->pid,
             ((*processList[i])->u_cpu + (*processList[i])->s_cpu),
             (*processList[i])->s_cpu,

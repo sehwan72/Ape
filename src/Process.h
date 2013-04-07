@@ -42,7 +42,7 @@ typedef struct {
 } stat_t;
 
 typedef struct {
-    uid_t uid; // User id of process
+    unsigned long uid; // User id of process
 } status_t;
 
 class Process 
@@ -69,12 +69,14 @@ class Process
         char   *getName(char *);
         int     getCPUTime();
         stat_t *getStatPtr();
+        status_t *getStatusPtr();
         int     getOpenFiles(std::vector<char *> *);
 
         // Process Monitoring        
         void printStat();
         int setCPUUsage();
         int updateStat();
+        int updateStatus();
         int  getMemoryMap(char **, int);
 
         // Process Management
