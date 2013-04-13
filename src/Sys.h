@@ -8,12 +8,13 @@ class Sys
     private:
         unsigned long int totalTime;
         unsigned long int pageSize;
+        unsigned long int parseBTime();
 
     public:
         static char *procdir;
-
+        unsigned long int btime;
         Sys();
-
+        
         //int setTotalTime();
 
         static unsigned long int getTotalTime()
