@@ -13,7 +13,17 @@ class Sys
     public:
         static char *procdir;
         unsigned long int btime;
+        unsigned long int childMax;
+        unsigned long int clockTicks;
+        unsigned long int openMax;
+        unsigned long int streamMax;
+
+        char *version;
+
         Sys();
+        ~Sys();
+
+        int parseVersion(char **, int);
         
         //int setTotalTime();
 
