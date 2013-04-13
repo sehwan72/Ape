@@ -39,6 +39,9 @@ int main()
     //}
     
 
+
+    Sys s = Sys();
+    printf(s.version);
     //removeTest();
     //mapTest();
     //initTest();
