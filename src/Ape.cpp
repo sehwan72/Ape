@@ -94,6 +94,7 @@ void Ape::sort(SortBy s)
 int Ape::update() 
 {
     int rcode;
+    unsigned int totalCPU = 0;
 
     // Set all processes up for updating
     std::map<int, Process *>::iterator it;
@@ -129,9 +130,12 @@ int Ape::update()
     
 
     // Remove all processes that were not updated (no procfs dir)
-    for (it = processMap.begin(); it != processMap.end(); ++it)
+    for (it = processMap.begin(); it != processMap.end(); ++it) {
         if (it->second->wasUpdated() == false)
             this->removeProcess(it->second->pid);
+        else
+            totalCPU += it->second->u_cpu + it->second->s_cpu;
+    }
 
     return 0;
 }

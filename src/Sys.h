@@ -18,6 +18,8 @@ class Sys
         unsigned long int openMax;
         unsigned long int streamMax;
 
+        unsigned int totalCPU;
+
         char *version;
 
         Sys();
