@@ -25,6 +25,7 @@ Sys::Sys()
 
     this->version = (char *) malloc (512);
     this->parseVersion(&this->version, 512);
+    this->totalCPU = 0;
 }
 
 Sys::~Sys() {
