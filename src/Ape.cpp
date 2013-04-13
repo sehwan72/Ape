@@ -182,7 +182,7 @@ void Ape::sortByParent()
 }
 
 void Ape::addChildren(std::vector<Process **> *tempVector, const unsigned long pid)
-{
+{   
     int i, j;
     for (i = 0, j = processList.size(); i < j; ++i) {
         if ((*processList[i])->getStatPtr()->ppid == pid) {
