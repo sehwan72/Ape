@@ -274,10 +274,9 @@ int Process::getOpenFiles(std::vector<char *> *fileList)
         
         symbolicLink = (char *)malloc(80);
         bzero(symbolicLink, 80);
-        snprintf(path, sizeof(path), "%s/%d/%s", Sys::procdir, this->pid, direntry->d_name);
+        snprintf(path, sizeof(path), "%s/%d/fd/%s", Sys::procdir, this->pid, direntry->d_name);
         r = readlink(path, symbolicLink, 79);
-        printf("%s -> ", (r < 0) ? strerror(errno) : "0");
-        printf("%s -> %s\n", path, symbolicLink);
+        if (r == -1) continue; // error reading file
         fileList->push_back(symbolicLink);
     }
     

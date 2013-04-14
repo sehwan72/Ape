@@ -42,6 +42,8 @@ int main()
 
     Sys s = Sys();
     printf(s.version);
+
+    fileTest();
     //removeTest();
     //mapTest();
     //initTest();
@@ -72,6 +74,10 @@ int mapTest()
     printf("\nafter:\n");
     printf("%s\n", maps);
     free(maps);
+}
+
+int allFilesTest() 
+{
 }
 
 int fileTest()
