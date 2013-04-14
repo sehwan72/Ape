@@ -27,15 +27,19 @@ int main()
     //return 0;
 
 
-    while (1) {
+    //while (1) {
         printf("\n");
         a.update();
+        a.sort(CPU);
         a.printProcesses(CPU);
         usleep(1000 * 1000);
         system("clear");
-    }
+    //}
     
 
+
+    Sys s = Sys();
+    printf(s.version);
     //removeTest();
     //mapTest();
     //initTest();

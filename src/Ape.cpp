@@ -90,6 +90,7 @@ void Ape::sort(SortBy s)
 int Ape::update() 
 {
     int rcode;
+    unsigned int totalCPU = 0;
 
     // Set all processes up for updating
     std::map<int, Process *>::iterator it;
@@ -125,9 +126,12 @@ int Ape::update()
     
 
     // Remove all processes that were not updated (no procfs dir)
-    for (it = processMap.begin(); it != processMap.end(); ++it)
+    for (it = processMap.begin(); it != processMap.end(); ++it) {
         if (it->second->wasUpdated() == false)
             this->removeProcess(it->second->pid);
+        else
+            totalCPU += it->second->u_cpu + it->second->s_cpu;
+    }
 
     return 0;
 }
@@ -156,5 +160,34 @@ void Ape::printProcesses(SortBy s)
             stat->start_time,
             stat->name
             );
+    }
+}
+
+void Ape::sortByParent()
+{
+    std::vector<Process **> tempVector1;
+    std::vector<Process **> tempVector2;
+
+    int i, j;
+    for (i = 0, j = processList.size(); i < j; ++i)
+        if ((*processList[i])->pid == 1)
+            break;
+
+    tempVector1.push_back(processList[i]);
+    addChildren(&tempVector1, (*processList[i])->pid);
+
+    tempVector2 = processList;
+    processList = tempVector1;
+    tempVector2.clear();
+}
+
+void Ape::addChildren(std::vector<Process **> *tempVector, const unsigned long pid)
+{   
+    int i, j;
+    for (i = 0, j = processList.size(); i < j; ++i) {
+        if ((*processList[i])->getStatPtr()->ppid == pid) {
+            tempVector->push_back(processList[i]);
+            addChildren(tempVector,(*processList[i])->pid); 
+        }
     }
 }
