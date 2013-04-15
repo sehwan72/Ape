@@ -6,6 +6,8 @@
 #include <iostream>
 #include <signal.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 
 // From /proc/<pid>/stat
 typedef struct {
@@ -42,7 +44,10 @@ typedef struct {
 } stat_t;
 
 typedef struct {
-    uid_t uid; // User id of process
+
+    unsigned long uid; // User id of process
+    unsigned long gid;
+    char username[50];
 } status_t;
 
 class Process 
@@ -56,6 +61,8 @@ class Process
 
         int setName();
         bool updated;
+
+
         
     public:
         double u_cpu; // User space cpu usage
@@ -64,17 +71,20 @@ class Process
         // Public data members and functions
         Process(pid_t);
         pid_t  pid;
+        int plevel;               // Hierarchy level of process
 
         // Accessors / Mutators
         char   *getName(char *);
         int     getCPUTime();
         stat_t *getStatPtr();
+        status_t *getStatusPtr();
         int     getOpenFiles(std::vector<char *> *);
 
         // Process Monitoring        
         void printStat();
         int setCPUUsage();
         int updateStat();
+        int updateStatus();
         int  getMemoryMap(char **, int);
 
         // Process Management
@@ -85,6 +95,8 @@ class Process
         int update();
         int wasUpdated();
         int resetUpdated();
+
+
 };
 
 #endif

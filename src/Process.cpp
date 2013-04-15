@@ -30,6 +30,7 @@ Process::Process(pid_t pid)
     this->u_cpu = 0L;
     this->s_cpu = 0L;
     this->last_cpu = Sys::getTotalTime();
+    this->updateStatus();
     this->updated = (this->updateStat() == 0);
 }
 
@@ -103,6 +104,11 @@ stat_t *Process::getStatPtr()
     return &this->stat;
 }
 
+status_t *Process::getStatusPtr()
+{
+    return &this->status;
+}
+
 // Process Monitoring
 void Process::printStat() {
     printf("Statistics for `%s`:\n"
@@ -173,6 +179,39 @@ int Process::setCPUUsage()
     return 0;
 }
 
+int Process::updateStatus()
+{
+    FILE *procfd;
+    char procfile[80];
+
+    snprintf(procfile, sizeof procfile, "%s/%d/status",
+            Sys::procdir, (int)this->pid);
+
+    procfd = fopen(procfile, "r");
+    if (procfd == NULL) {
+        fprintf(stderr, "fopen error: %s\n", procfile);
+        return -1;
+    }
+
+    char buf[256];
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+    fgets(buf, 256, procfd);
+
+    sscanf(buf, "Uid:\t%lu", &this->status.uid);
+    fclose(procfd);
+
+    passwd *pwd = getpwuid(this->status.uid);
+    strcpy(this->status.username, pwd->pw_name);
+    this->status.gid = pwd->pw_gid;
+
+    return 0;
+}
+
 int Process::updateStat() 
 {
     FILE *procfd;
@@ -235,15 +274,16 @@ int Process::getOpenFiles(std::vector<char *> *fileList)
     int fd, r;
     while ((direntry = readdir(dir)) != NULL) {
         std::string str(direntry->d_name);
-        
+
         if ((str.find_first_not_of( "0123456789" )) != std::string::npos) continue;
-        
+
         symbolicLink = (char *)malloc(80);
         bzero(symbolicLink, 80);
-        snprintf(path, sizeof(path), "%s/%d/%s", Sys::procdir, this->pid, direntry->d_name);
+        snprintf(path, sizeof(path), "%s/%d/fd/%s", Sys::procdir, this->pid, direntry->d_name);
         r = readlink(path, symbolicLink, 79);
-        printf("%s -> ", (r < 0) ? strerror(errno) : "0");
-        printf("%s -> %s\n", path, symbolicLink);
+        printf("Path = %s", path);
+        fflush(stdout);
+        perror(strerror(errno));
         fileList->push_back(symbolicLink);
     }
     

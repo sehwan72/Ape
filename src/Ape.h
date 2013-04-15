@@ -7,7 +7,7 @@
 #include "Process.h"
 #include "Sys.h"
 
-enum SortBy { CPU, MEM, NAME, PID };
+enum SortBy { CPU, MEM, NAME, PID, PPID };
 
 class Ape
 {
@@ -28,7 +28,10 @@ class Ape
 
         void sort(SortBy);
         void printProcesses(SortBy);
-       
+      
+        void sortByParent();
+        void addChildren(std::vector<Process **> *, const unsigned long, int level = 1);
+
         static bool compareByPID(Process **p1, Process **p2) {
             return (*p1)->getStatPtr()->pid > 
                    (*p2)->getStatPtr()->pid;

@@ -10,7 +10,11 @@
 #include "../../src/Process.h"
 #include "../../src/Sys.h"
 #include <QTimer>
+#include <QMenu>
+#include <QMessageBox>
+#include <QTableWidget>
 #include <condition_variable>
+#include <filesinusedialog.h>
 
 namespace Ui {
 class MainWindow;
@@ -23,7 +27,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    int addLine(Process *);
+    int addLine(Process *, int);
     Ape *ape;
     void clearTable();
 
@@ -31,9 +35,28 @@ public:
 private:
     Ui::MainWindow *ui;    
     const char* itoa(int);
+    QTimer *timer;
+    SortBy sortSetting;
+    bool sortReverse;
+    void myUIInit();
+    void colorRows();
+    int getParentRow(int);
+    Process *getProcessAtRow(int);
+    Process *currentProcess;
+    unsigned int currentPID;
+    void setCurrentProcess(Process *);
+    void resetCurrentProcess();
+    void showFilesInUse();
+    FilesInUseDialog filesInUseList;
+
+protected:
+    void closeEvent(QCloseEvent *);
 
 private slots:
-    void updateUI();
+    void updateUI();    
+    void showProcessContextMenu(const QPoint&);
+    void sortTable(int);
+    void doubleClicked(QTableWidgetItem *);
 
 };
 
