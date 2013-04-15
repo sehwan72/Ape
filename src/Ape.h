@@ -28,6 +28,7 @@ class Ape
 
         void sort(SortBy);
         void printProcesses(SortBy);
+        void getProcessesUsingFile(std::vector<Process *> *, char *);
       
         void sortByParent();
         void addChildren(std::vector<Process **> *, const unsigned long, int level = 1);

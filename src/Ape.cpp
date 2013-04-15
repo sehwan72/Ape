@@ -1,7 +1,5 @@
 #include <algorithm>
 
-
-//#include <curses.h>
 #include <stdlib.h> // strtol
 #include <dirent.h>
 
@@ -194,5 +192,23 @@ void Ape::addChildren(std::vector<Process **> *tempVector, const unsigned long p
             (*processList[i])->plevel = level;
             addChildren(tempVector,(*processList[i])->pid, ++level);
         }
+    }
+}
+
+void Ape::getProcessesUsingFile(std::vector<Process *> *matches, char *file)
+{
+    int i, j, k, l;
+    std::vector<char *> files;
+    for (i = 0, j = processList.size(); i < j; ++i) {
+        (*processList[i])->getOpenFiles(&files);
+
+        for (k = 0, l = files.size(); k < l; ++k) {
+            if (files[k] == file) {
+                matches->push_back(*processList[i]);
+                break;
+            }
+            free(files[k]);
+        }
+        files.clear();
     }
 }

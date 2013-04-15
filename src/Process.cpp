@@ -281,9 +281,7 @@ int Process::getOpenFiles(std::vector<char *> *fileList)
         bzero(symbolicLink, 80);
         snprintf(path, sizeof(path), "%s/%d/fd/%s", Sys::procdir, this->pid, direntry->d_name);
         r = readlink(path, symbolicLink, 79);
-        printf("Path = %s", path);
-        fflush(stdout);
-        perror(strerror(errno));
+        if (r == -1) continue; // error reading file
         fileList->push_back(symbolicLink);
     }
     
