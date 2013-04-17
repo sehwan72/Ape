@@ -13,7 +13,7 @@
 typedef struct {
     int pid;           // Process ID
     char name[80];     // Executable name
-    char state;        // State (R, S, D, Z, T)
+    char state;        // State (R, S, D, Z, T, W)
     int ppid;          // Parent Process ID
     int pgrp;          // PGRP
     int sid;           // Session ID
@@ -53,8 +53,7 @@ typedef struct {
 class Process 
 {
     private:
-        // Private data members and functions
-        char   name[7];  
+        // Private data members and functions 
         stat_t   stat;
         status_t status;
         unsigned long int last_cpu;
@@ -67,6 +66,7 @@ class Process
     public:
         double u_cpu; // User space cpu usage
         double s_cpu; // Kernel space cpu usage
+        char   name[7];
 
         // Public data members and functions
         Process(pid_t);
@@ -85,7 +85,7 @@ class Process
         int setCPUUsage();
         int updateStat();
         int updateStatus();
-        int  getMemoryMap(char **, int);
+        int  getMemoryMap(char *, int);
 
         // Process Management
         int sendSignal(int);

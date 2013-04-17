@@ -6,9 +6,7 @@
 class Sys 
 {
     private:
-        unsigned long int totalTime;
-        unsigned long int pageSize;
-        unsigned long int parseBTime();
+        unsigned long int totalTime;        
 
     public:
         static char *procdir;
@@ -17,6 +15,9 @@ class Sys
         unsigned long int clockTicks;
         unsigned long int openMax;
         unsigned long int streamMax;
+        unsigned long int pageSize;
+        unsigned long int runningProcesses;
+        unsigned long int blockedProcesses;
 
         unsigned int totalCPU;
 
@@ -26,6 +27,7 @@ class Sys
         ~Sys();
 
         int parseVersion(char **, int);
+        unsigned long int updateStat();
         
         //int setTotalTime();
 

@@ -21,7 +21,7 @@ Sys::Sys()
    // this->clockTicks = sysconf(_SC_CLK_TCK);
    // this->openMax    = sysconf(_SC_OPEN_MAX); // max open files
    // this->streamMax  = sysconf(_SC_STREAM_MAX);
-    this->btime = this->parseBTime();
+    this->btime = this->updateStat();
 
     this->version = (char *) malloc (512);
     this->parseVersion(&this->version, 512);
@@ -32,7 +32,7 @@ Sys::~Sys() {
     free(this->version);
 }
 
-unsigned long int Sys::parseBTime() 
+unsigned long int Sys::updateStat()
 {
     FILE *procfd;
     char procfile[80];
@@ -46,16 +46,26 @@ unsigned long int Sys::parseBTime()
         return -1;
     }
 
-    char buf[256];
-    fgets(buf, 256, procfd);
-    fgets(buf, 256, procfd);
-    fgets(buf, 256, procfd);
-    fgets(buf, 256, procfd);
-    fgets(buf, 256, procfd);
-    fgets(buf, 256, procfd);
+    int bufSize = 1024 * 1000;
+    char buf[bufSize];
+    fgets(buf, bufSize, procfd);
+    fgets(buf, bufSize, procfd);
+    fgets(buf, bufSize, procfd);
+    fgets(buf, bufSize, procfd);
+    fgets(buf, bufSize, procfd);
+    fgets(buf, bufSize, procfd);
+    fgets(buf, bufSize, procfd);
+    fgets(buf, bufSize, procfd);
 
     unsigned long int time;
     sscanf(buf, "btime %lu", &time);
+
+    fgets(buf, bufSize, procfd);
+    fgets(buf, bufSize, procfd);
+    sscanf(buf, "procs_running %lu", &this->runningProcesses);
+    fgets(buf, bufSize, procfd);
+    sscanf(buf, "procs_blocked %lu", &this->blockedProcesses);
+
     fclose(procfd);
     return time;
 }

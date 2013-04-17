@@ -10,25 +10,41 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+    currentProcess = NULL;
+    currentPID = 0;
+
     sortSetting = PID;
-    sortReverse = true;
+    sortReverse = false;
 
     myUIInit();
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateUI()));
 
+    int animationDuration = 100;
+
+    cmdFrame = new QPropertyAnimation(ui->commandFrame, "maximumHeight");
+    cmdFrame->setDuration(animationDuration);
+
+    cmdShortcut = new QShortcut(QKeySequence("Ctrl+Alt+Shift+T"), this);
+
     connect(this->ui->tableWidget, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showProcessContextMenu(const QPoint&)));
     connect(this->ui->tableWidget->horizontalHeader(), SIGNAL(sectionClicked(int)), this, SLOT(sortTable(int)));
     connect(this->ui->tableWidget, SIGNAL(itemDoubleClicked(QTableWidgetItem *)), this, SLOT(doubleClicked(QTableWidgetItem *)));
+    connect(cmdShortcut, SIGNAL(activated()), this, SLOT(toggleCmd()));
+    connect(this->ui->menuBar, SIGNAL(triggered(QAction*)), this, SLOT(handleMenuBar(QAction*)));
 
     updateUI();
-    timer->start(1000);
+    timer->start(500);
 
-    currentProcess = NULL;
-    currentPID = 0;
 
-    filesInUseList.setWindowFlags(Qt::WindowMinimizeButtonHint | Qt:: WindowCloseButtonHint);
+
+    filesInUseList.setWindowFlags(Qt::WindowMinimizeButtonHint | Qt:: WindowCloseButtonHint);    
+
+    updateInfoTab();
+    showSysInfo();
+
+    ui->commandFrame->setFixedHeight(0);
 }
 
 MainWindow::~MainWindow()
@@ -36,9 +52,160 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::toggleCmd() {
+    if (ui->commandFrame->height() == 0) {
+        cmdFrame->setStartValue(0);
+        cmdFrame->setEndValue(50);
+    } else {
+        cmdFrame->setStartValue(50);
+        cmdFrame->setEndValue(0);
+    }
+    cmdFrame->start();
+}
+
+void MainWindow::updateInfoTab() {
+    ui->resInUse->clear();
+    if (currentPID == 0) {
+        ui->procNameLabel->setText("");
+        ui->pidLabel->setText("");
+        ui->ppidLabel->setText("");
+        ui->usernameLabel->setText("");
+        ui->uidLabel->setText("");
+        ui->gidLabel->setText("");
+        ui->cpuLabel->setText("");
+        ui->ucpuLabel->setText("");
+        ui->scpuLabel->setText("");
+        ui->stateLabel->setText("");
+        ui->ttyLabel->setText("");
+        ui->ttypgLabel->setText("");
+        ui->flagLabel->setText("");
+        ui->niceLabel->setText("");
+        ui->prtyLabel->setText("");
+        ui->nothLabel->setText("");
+        ui->vszLabel->setText("");
+        ui->rssLabel->setText("");
+        ui->pgLabel->setText("");
+        ui->sidLabel->setText("");
+        ui->coredumpButton->setDisabled(true);
+        ui->sigkillButton->setDisabled(true);
+        ui->sigintButton->setDisabled(true);
+        ui->sigstopButton->setDisabled(true);
+        ui->sigtermButton->setDisabled(true);
+        ui->memmapButton->setDisabled(true);
+        ui->sendsigButton->setDisabled(true);
+    } else {
+        stat_t *st = currentProcess->getStatPtr();
+        status_t *stat = currentProcess->getStatusPtr();
+
+        ui->procNameLabel->setText(st->name);
+        ui->pidLabel->setText(itoa(st->pid));
+        ui->ppidLabel->setText(itoa(st->ppid));
+        ui->usernameLabel->setText(stat->username);
+        ui->uidLabel->setText(itoa(stat->uid));
+        ui->gidLabel->setText(itoa(stat->gid));
+        ui->cpuLabel->setText(itoa(currentProcess->u_cpu + currentProcess->s_cpu));
+
+        if (currentProcess->u_cpu + currentProcess->s_cpu > 50)
+            ui->cpuLabel->setStyleSheet("QLabel {color: red}");
+        else
+            ui->cpuLabel->setStyleSheet("QLabel {color: black}");
+
+        ui->ucpuLabel->setText(itoa(currentProcess->u_cpu));
+        if (currentProcess->u_cpu > 50)
+            ui->ucpuLabel->setStyleSheet("QLabel {color: red}");
+        else
+            ui->ucpuLabel->setStyleSheet("QLabel {color: black}");
+
+        ui->scpuLabel->setText(itoa(currentProcess->s_cpu));
+        if (currentProcess->s_cpu > 50)
+            ui->scpuLabel->setStyleSheet("QLabel {color: red}");
+        else
+            ui->scpuLabel->setStyleSheet("QLabel {color: black}");
+
+
+        switch (st->state) {
+            case 'R':
+                ui->stateLabel->setText("Running");
+                break;
+            case 'S':
+                ui->stateLabel->setText("Sleeping");
+                break;
+            case 'D':
+                ui->stateLabel->setText("Waiting on Disk");
+                break;
+            case 'Z':
+                ui->stateLabel->setText("Zombie");
+                break;
+            case 'T':
+                ui->stateLabel->setText("Traced");
+                break;
+            case 'W':
+                ui->stateLabel->setText("Paging");
+                break;
+        }
+
+
+        ui->ttyLabel->setText(itoa(st->tty_nr));
+        ui->ttypgLabel->setText(itoa(st->tty_pgrp));
+        ui->flagLabel->setText(itoa(st->flags));
+        ui->niceLabel->setText(itoa(st->niceness));
+        ui->prtyLabel->setText(itoa(st->priority));
+        ui->nothLabel->setText(itoa(st->threads));
+        ui->vszLabel->setText(itoa(st->vss));
+        ui->rssLabel->setText(itoa(st->rss));
+        ui->pgLabel->setText(itoa(st->pgrp));
+        ui->sidLabel->setText(itoa(st->sid));
+        ui->coredumpButton->setEnabled(true);
+        ui->sigkillButton->setEnabled(true);
+        ui->sigintButton->setEnabled(true);
+        ui->sigstopButton->setEnabled(true);
+        ui->sigtermButton->setEnabled(true);
+        ui->memmapButton->setEnabled(true);
+        ui->sendsigButton->setEnabled(true);
+
+        std::vector<char *> listOfFiles;
+        int r = currentProcess->getOpenFiles(&listOfFiles);
+        if (r != 0)
+            ui->resInUse->addItem(new QListWidgetItem("Permission Denied"));
+        else {
+            for (int i = 0; i < listOfFiles.size(); i++) {
+                ui->resInUse->addItem(new QListWidgetItem(listOfFiles[i]));
+            }
+        }
+    }
+}
+
 void MainWindow::closeEvent(QCloseEvent *evt) {
     Q_UNUSED(evt);
     filesInUseList.close();
+    aboutApe.close();
+}
+
+void MainWindow::showSysInfo() {
+    char sysStr[20000];
+    time_t time = (time_t)this->ape->system->btime;
+    struct tm *timeS = localtime(&time);
+
+
+    ui->sysinfoLabel->setTextFormat(Qt::PlainText);
+    sprintf(sysStr, "Version:\n%s\n\n"
+            "System Start Time: %02d:%02d:%02d\n\n\n"
+            "Page Size: %lukb\n\n\n"
+            "Total CPU Usage: %lu\n\n\n"
+            "Alive Processes: %d\n\n\n"
+            "Running Processes: %lu\n\n\n"
+            "Blocked Processes: %lu",
+            this->ape->system->version,
+            timeS->tm_hour,
+            timeS->tm_min,
+            timeS->tm_sec,
+            this->ape->system->pageSize,
+            this->ape->system->totalCPU,
+            this->ape->processList.size(),
+            this->ape->system->runningProcesses,
+            this->ape->system->blockedProcesses
+            );
+    ui->sysinfoLabel->setText(sysStr);
 }
 
 void MainWindow::myUIInit()
@@ -49,11 +216,48 @@ void MainWindow::myUIInit()
     ui->tableWidget->horizontalHeaderItem(1)->setSizeHint(size);
     ui->tableWidget->resizeColumnToContents(1);
 
-    this->ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    size.setWidth(80);
+    ui->tableWidget->horizontalHeaderItem(2)->setSizeHint(size);
+    ui->tableWidget->resizeColumnToContents(2);
 
+    ui->tableWidget->horizontalHeaderItem(3)->setSizeHint(size);
+    ui->tableWidget->resizeColumnToContents(3);
+
+
+    size.setWidth(60);
+    ui->tableWidget->horizontalHeaderItem(4)->setSizeHint(size);
+    ui->tableWidget->resizeColumnToContents(4);
+
+    ui->tableWidget->horizontalHeaderItem(5)->setSizeHint(size);
+    ui->tableWidget->resizeColumnToContents(5);
+
+    ui->tableWidget->horizontalHeaderItem(6)->setSizeHint(size);
+    ui->tableWidget->resizeColumnToContents(6);
+
+    ui->tableWidget->horizontalHeaderItem(10)->setSizeHint(size);
+    ui->tableWidget->resizeColumnToContents(10);
+
+    this->ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    updateStatusBar();
 }
 
-void MainWindow::updateUI() {
+void MainWindow::updateStatusBar(char* message) {
+    if (currentPID == 0)
+        ui->statusBar->showMessage(message);
+    else {
+        char msg[255];
+        sprintf(msg, "Process: %s  PID:  %d  User: %s",
+                currentProcess->getStatPtr()->name,
+                currentProcess->getStatPtr()->pid,
+                currentProcess->getStatusPtr()->username
+                );
+        ui->statusBar->showMessage(msg);
+    }
+}
+
+void MainWindow::updateUI() {    
+    updateInfoTab();
+    showSysInfo();
     if (currentProcess != NULL) {
         bool alive = false;
         for (int i = 0; i < ape->processList.size(); i++) {
@@ -63,8 +267,8 @@ void MainWindow::updateUI() {
             }
         }
         if (!alive) {
-            resetCurrentProcess();
-        }
+            resetCurrentProcess();            
+        }        
     }
 
     ape->update();
@@ -78,12 +282,10 @@ void MainWindow::updateUI() {
             addLine((*(ape->processList[ape->processList.size() - 1 - i])), i);
         }
     }
-    if (sortSetting == PPID) colorRows();
-    ui->tableWidget->update();
 
-    if (currentPID != 0) {
-        //ui->plabel->setText(currentProcess->getStatPtr()->name);
-    }
+    if (sortSetting == PPID) colorRows();
+
+    ui->tableWidget->update();
 }
 
 int MainWindow::addLine(Process *p, int currRow) {
@@ -129,12 +331,12 @@ int MainWindow::addLine(Process *p, int currRow) {
 
     //Set the vsz column
     qi = new QTableWidgetItem();
-    qi->setData(Qt::DisplayRole, (qulonglong)stat->vss);
+    qi->setData(Qt::DisplayRole, (qulonglong)stat->vss / 1024);
     ui->tableWidget->setItem(currRow, i++, qi);
 
     //Set the rss column
     qi = new QTableWidgetItem();
-    qi->setData(Qt::DisplayRole, (qulonglong)stat->rss);
+    qi->setData(Qt::DisplayRole, (qulonglong)stat->rss / 1024);
     ui->tableWidget->setItem(currRow, i++, qi);
 
     //Set the tty_nr column
@@ -150,7 +352,13 @@ int MainWindow::addLine(Process *p, int currRow) {
 
     //Set the process start time column
     qi = new QTableWidgetItem();
-    qi->setData(Qt::DisplayRole, (qulonglong)stat->start_time);
+
+    time_t time = (time_t)((stat->start_time / HZ));
+    struct tm *t = gmtime(&time);
+    char timeString[255];
+    strftime(timeString, 255, "%T", t);
+
+    qi->setData(Qt::DisplayRole, timeString);
     ui->tableWidget->setItem(currRow, i++, qi);
 
     return currRow++;
@@ -183,6 +391,16 @@ Process * MainWindow::getProcessAtRow(int row) {
     }
 }
 
+void MainWindow::updateMemoryMap() {
+    char memoryMap[1024 * 100];
+    currentProcess->getMemoryMap(memoryMap, sizeof(char) * 1024 * 100);
+    if (memoryMap[0] == NULL) {
+        ui->memoryMapLabel->setText("Permission denied");
+    } else {
+        ui->memoryMapLabel->setText(memoryMap);
+    }
+}
+
 void MainWindow::setCurrentProcess(Process* process) {
     currentProcess = process;
     currentPID = currentProcess->pid;
@@ -191,6 +409,7 @@ void MainWindow::setCurrentProcess(Process* process) {
 void MainWindow::resetCurrentProcess() {
     currentProcess = NULL;
     currentPID = 0;
+    updateStatusBar();
 }
 
 void MainWindow::showProcessContextMenu(const QPoint &pos) {
@@ -204,13 +423,19 @@ void MainWindow::showProcessContextMenu(const QPoint &pos) {
     pcMenu.addAction("Files In Use");
     pcMenu.addAction("Get General Information");
     pcMenu.addAction("Get Memory Map");
-    pcMenu.addAction("Get Core Dump");
 
     for (int i = 0; i < ape->processList.size(); i++) {
         if (ui->tableWidget->item(ui->tableWidget->itemAt(pos)->row(), 2)->data(Qt::DisplayRole) == (*(ape->processList[i]))->getStatPtr()->pid) {
             setCurrentProcess(*(ape->processList[i]));
             break;
         }
+    }
+
+    if (currentProcess->getStatusPtr()->uid != getuid()) {
+        pcMenu.actions()[0]->setDisabled(true);
+        pcMenu.actions()[3]->setDisabled(true);
+        pcMenu.actions()[5]->setDisabled(true);
+        pcMenu.actions()[6]->setDisabled(true);
     }
 
     QAction * action = pcMenu.exec(globalPos);
@@ -226,22 +451,24 @@ void MainWindow::showProcessContextMenu(const QPoint &pos) {
             killConfirm.setDefaultButton(QMessageBox::No);
 
             if (killConfirm.exec() == 0x00004000) {
-                int result = currentProcess->sendSignal(9);
+                int r = currentProcess->sendSignal(9);
+                if (r != 0) return;
                 resetCurrentProcess();
             }
         } else if (action->text() == "Stop") {
+            int r = currentProcess->sendSignal(19);
 
         } else if (action->text() == "Terminate") {
+            int r = currentProcess->sendSignal(15);
+            if (r == 0) resetCurrentProcess();
 
         } else if (action->text() == "Get General Information") {
             ui->managementSubTab->setCurrentWidget(ui->managementSubTab->widget(0));
             ui->tabWidget->setCurrentWidget(ui->tabWidget->widget(1));
-        } else if (action->text() == "Get General Information") {
-
         } else if (action->text() == "Get Memory Map") {
-
-        } else if (action->text() == "Get Core Dump") {
-
+            updateMemoryMap();
+            ui->managementSubTab->setCurrentWidget(ui->managementSubTab->widget(1));
+            ui->tabWidget->setCurrentWidget(ui->tabWidget->widget(1));
         } else if (action->text() == "Files In Use") {
             showFilesInUse();
         }
@@ -263,6 +490,14 @@ void MainWindow::showFilesInUse() {
 
 void MainWindow::sortTable(int col) {
     switch (col) {
+        case 0:
+            sortSetting = USER;
+            sortReverse = !sortReverse;
+            break;
+        case 1:
+            sortSetting = NAME;
+            sortReverse = !sortReverse;
+            break;
         case 2:
             sortSetting = PID;
             sortReverse = !sortReverse;
@@ -277,27 +512,43 @@ void MainWindow::sortTable(int col) {
             sortSetting = CPU;
             sortReverse = !sortReverse;
             break;
+        case 5:
+            sortSetting = UCPU;
+            sortReverse = !sortReverse;
+            break;
+        case 6:
+            sortSetting = SCPU;
+            sortReverse = !sortReverse;
+            break;
+        case 7:
+            sortSetting = VSZ;
+            sortReverse = !sortReverse;
+            break;
+        case 8:
+            sortSetting = RSS;
+            sortReverse = !sortReverse;
+            break;
+        case 9:
+            sortSetting = TTY;
+            sortReverse = !sortReverse;
+            break;
+        case 10:
+            sortSetting = STATE;
+            sortReverse = !sortReverse;
+            break;
+        case 11:
+            sortSetting = START;
+            sortReverse = !sortReverse;
+            break;
     }
 }
 
 void MainWindow::colorRows() {
 
     QColor *colors = new QColor[6];
-    int maxBright = 220;
-    int minBright = 40;
-    /*
-    colors[0] = QColor(maxBright, minBright, minBright);      //Red
-    colors[1] = QColor(minBright, maxBright, minBright);      //Green
-    colors[2] = QColor(minBright, minBright, maxBright);      //Blue
-    colors[3] = QColor(maxBright, maxBright, minBright);    //Yellow
-    colors[4] = QColor(minBright, maxBright, maxBright);    //Cyan
-    colors[5] = QColor(maxBright, minBright, maxBright);    //Magenta
-    */
 
     colors[0] = QColor(119, 184, 207);
     colors[1] = QColor(227, 119, 194);
-    //colors[0] = QColor(44, 160, 44);
-
 
     int ci = 27;                         // Color increment variable
     int nextColor = 0;
@@ -358,8 +609,80 @@ void MainWindow::doubleClicked(QTableWidgetItem *item) {
         }
     }
 
-    //TODO: Add General Information Update Function Here
+    updateStatusBar();
+
+    updateMemoryMap();
+    updateInfoTab();
 
     ui->managementSubTab->setCurrentWidget(ui->managementSubTab->widget(0));
     ui->tabWidget->setCurrentWidget(ui->tabWidget->widget(1));
+}
+
+void MainWindow::on_sigkillButton_clicked()
+{
+    int r = currentProcess->sendSignal(9);
+    if (r != 0) return;
+    resetCurrentProcess();
+    updateInfoTab();
+}
+
+void MainWindow::on_memmapButton_clicked()
+{
+    ui->managementSubTab->setCurrentWidget(ui->managementSubTab->widget(1));
+    ui->tabWidget->setCurrentWidget(ui->tabWidget->widget(1));
+}
+
+void MainWindow::on_sigintButton_clicked()
+{
+    int r = currentProcess->sendSignal(2);
+    if (r != 0) return;
+    updateInfoTab();
+}
+
+void MainWindow::on_sigtermButton_clicked()
+{
+    int r = currentProcess->sendSignal(15);
+    if (r == 0) resetCurrentProcess();
+    updateInfoTab();
+}
+
+void MainWindow::on_sigstopButton_clicked()
+{
+    int r = currentProcess->sendSignal(19);
+    if (r != 0) return;
+    updateInfoTab();
+}
+
+void MainWindow::on_sendsigButton_clicked()
+{
+    int signal = ui->sigText->text().toInt();
+    // 0 means toInt() failed
+    if (signal > 0 && signal <= 31) {
+        int r = currentProcess->sendSignal(signal);
+        if (r == 0 && (signal == 3 || signal == 9 || signal == 15)) {
+            resetCurrentProcess();
+        }
+    } else {
+        QMessageBox invalidSig;
+        invalidSig.setWindowTitle("Invalid Signal");
+        invalidSig.setText("Invalid Signal!");
+        invalidSig.exec();
+    }
+    ui->sigText->clear();
+    updateInfoTab();
+}
+
+void MainWindow::on_coredumpButton_clicked()
+{
+    int r = currentProcess->sendSignal(11);
+    if (r != 0) return;
+    resetCurrentProcess();
+    updateInfoTab();
+}
+
+void MainWindow::handleMenuBar(QAction* action) {
+    if (action->text() == "About Ape") {
+        aboutApe.show();
+        return;
+    }
 }

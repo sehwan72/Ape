@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1121</width>
-    <height>734</height>
+    <width>1033</width>
+    <height>780</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1033</width>
+    <height>780</height>
+   </size>
   </property>
   <property name="mouseTracking">
    <bool>true</bool>
@@ -24,7 +36,7 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -38,16 +50,19 @@
    <property name="autoFillBackground">
     <bool>true</bool>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_4">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="1">
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="sizeConstraint">
-       <enum>QLayout::SetMaximumSize</enum>
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
       </property>
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -167,22 +182,22 @@
             </column>
             <column>
              <property name="text">
-              <string>U_CPU</string>
+              <string>UCPU</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>S_CPU</string>
+              <string>SCPU</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>VSZ</string>
+              <string>VSZ (kb)</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>RSS</string>
+              <string>RSS (kb)</string>
              </property>
             </column>
             <column>
@@ -215,22 +230,1171 @@
           <item>
            <widget class="QTabWidget" name="managementSubTab">
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="generalTab">
              <attribute name="title">
               <string>General</string>
              </attribute>
+             <widget class="QLabel" name="label">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>50</y>
+                <width>101</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Process Name:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_2">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>80</y>
+                <width>81</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Process ID:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_3">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>110</y>
+                <width>131</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Parent Process ID:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_4">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>230</y>
+                <width>81</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>CPU Usage:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_5">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>260</y>
+                <width>71</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>User CPU:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_6">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>290</y>
+                <width>91</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Kernel CPU:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_7">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>320</y>
+                <width>101</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Process State:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_8">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>290</y>
+                <width>111</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Process Group:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_9">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>170</y>
+                <width>67</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Priority:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_10">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>140</y>
+                <width>71</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Niceness:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_11">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>200</y>
+                <width>141</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Number of Threads:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_12">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>50</y>
+                <width>31</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>TTY:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_13">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>110</y>
+                <width>41</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Flags:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_14">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>320</y>
+                <width>81</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Session ID:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_15">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>230</y>
+                <width>161</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Virtual Memory Usage:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_16">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>260</y>
+                <width>171</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Resident Memory Usage:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_17">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>80</y>
+                <width>131</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>TTY Process Group:</string>
+              </property>
+             </widget>
+             <widget class="Line" name="line">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>350</y>
+                <width>961</width>
+                <height>16</height>
+               </rect>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>0</width>
+                <height>3</height>
+               </size>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_18">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>170</y>
+                <width>61</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>User ID:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_19">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>200</y>
+                <width>67</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Group ID:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_20">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>140</y>
+                <width>71</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Username:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_21">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>201</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Process Information</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_22">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>370</y>
+                <width>201</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Process Controls</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="procNameLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>50</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>PNAMEs</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="pidLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>80</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>PID</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="ppidLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>110</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>PPID</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="usernameLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>140</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>USRN</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="uidLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>170</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>UID</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="cpuLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>230</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>CPU</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="ucpuLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>260</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>UCPU</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="gidLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>200</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>GID</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="scpuLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>290</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>SCPU</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="stateLabel">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>320</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>STATE</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="ttyLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>50</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>TTY</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="pgLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>290</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>PG</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="sidLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>320</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>SID</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="nothLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>200</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>NOTH</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="vszLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>230</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>VSZ</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="flagLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>110</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>FLAG</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="niceLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>140</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>NICE</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="prtyLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>170</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>PRTY</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="rssLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>260</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>RSS</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="ttypgLabel">
+              <property name="geometry">
+               <rect>
+                <x>700</x>
+                <y>80</y>
+                <width>250</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>TTYPG</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="sigkillButton">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>400</y>
+                <width>131</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Send SIGKILL</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="sigintButton">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>440</y>
+                <width>131</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Send SIGINT</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="sigtermButton">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>480</y>
+                <width>131</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Send SIGTERM</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="sigstopButton">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>520</y>
+                <width>131</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Send SIGSTOP</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="sendsigButton">
+              <property name="geometry">
+               <rect>
+                <x>220</x>
+                <y>400</y>
+                <width>111</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Send Signal</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="coredumpButton">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>520</y>
+                <width>171</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="palette">
+               <palette>
+                <active>
+                 <colorrole role="WindowText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Button">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>170</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Light">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Midlight">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>212</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Dark">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>85</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Mid">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>113</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Text">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="BrightText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ButtonText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Base">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Window">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>170</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Shadow">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="AlternateBase">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>212</red>
+                    <green>127</green>
+                    <blue>127</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ToolTipBase">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>220</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ToolTipText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                </active>
+                <inactive>
+                 <colorrole role="WindowText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Button">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>170</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Light">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Midlight">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>212</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Dark">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>85</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Mid">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>113</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Text">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="BrightText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ButtonText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Base">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Window">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>170</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Shadow">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="AlternateBase">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>212</red>
+                    <green>127</green>
+                    <blue>127</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ToolTipBase">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>220</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ToolTipText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                </inactive>
+                <disabled>
+                 <colorrole role="WindowText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>85</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Button">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>170</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Light">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Midlight">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>212</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Dark">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>85</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Mid">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>113</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Text">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>85</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="BrightText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ButtonText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>85</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Base">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>170</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Window">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>170</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="Shadow">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="AlternateBase">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>170</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ToolTipBase">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>220</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                 <colorrole role="ToolTipText">
+                  <brush brushstyle="SolidPattern">
+                   <color alpha="255">
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                   </color>
+                  </brush>
+                 </colorrole>
+                </disabled>
+               </palette>
+              </property>
+              <property name="text">
+               <string>Generate Core Dump</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="memmapButton">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>440</y>
+                <width>171</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>View Memory Map</string>
+              </property>
+             </widget>
+             <widget class="QListWidget" name="resInUse">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>400</y>
+                <width>451</width>
+                <height>141</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_23">
+              <property name="geometry">
+               <rect>
+                <x>500</x>
+                <y>370</y>
+                <width>201</width>
+                <height>17</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Resources In Use</string>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="sigText">
+              <property name="geometry">
+               <rect>
+                <x>160</x>
+                <y>400</y>
+                <width>51</width>
+                <height>27</height>
+               </rect>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
             </widget>
             <widget class="QWidget" name="memoryMapTab">
              <attribute name="title">
               <string>Memory Map</string>
              </attribute>
-            </widget>
-            <widget class="QWidget" name="coreDumpTab">
-             <attribute name="title">
-              <string>Core Dump</string>
-             </attribute>
+             <widget class="QWidget" name="verticalLayoutWidget_2">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>971</width>
+                <height>571</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QTextBrowser" name="memoryMapLabel">
+                 <property name="font">
+                  <font>
+                   <family>Ubuntu Mono</family>
+                   <pointsize>12</pointsize>
+                  </font>
+                 </property>
+                 <property name="html">
+                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu Mono'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;No memory map to display&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </widget>
           </item>
@@ -240,25 +1404,155 @@
          <attribute name="title">
           <string>System Information</string>
          </attribute>
+         <widget class="QWidget" name="verticalLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>10</y>
+            <width>991</width>
+            <height>631</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetDefaultConstraint</enum>
+           </property>
+           <item>
+            <widget class="QLabel" name="sysinfoLabel">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>System Information</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="commandFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="commandLabel">
+           <property name="text">
+            <string>Command</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="commandBox"/>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
     </item>
    </layout>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
+  <widget class="QStatusBar" name="statusBar">
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="sizeGripEnabled">
     <bool>false</bool>
-   </attribute>
+   </property>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1033</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionShow_Command_Bar"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionAbout_Ape"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+   <addaction name="menuAbout"/>
+  </widget>
   <action name="actionFile">
    <property name="text">
     <string>File</string>
+   </property>
+  </action>
+  <action name="actionShow_Command_Bar">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Show Command Bar</string>
+   </property>
+   <property name="shortcut">
+    <string/>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAbout_Ape">
+   <property name="text">
+    <string>About Ape</string>
    </property>
   </action>
  </widget>

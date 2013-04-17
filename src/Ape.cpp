@@ -71,6 +71,10 @@ void Ape::sort(SortBy s)
     bool (*comp)(Process **, Process**);
 
     switch (s) {
+        case NAME:
+            comp = Ape::compareByName;
+            break;
+
         case CPU:
             comp = Ape::compareByCPU;
             break;
@@ -78,12 +82,45 @@ void Ape::sort(SortBy s)
         case PID:
             comp = Ape::compareByPID;
             break;
-    
+
         case PPID:
             sortByParent();
             return;
+
+        case VSZ:
+            comp = Ape::compareByVSZ;
+            break;
+
+        case RSS:
+            comp = Ape::compareByRSS;
+            break;
+
+        case USER:
+            comp = Ape::compareByUsername;
+            break;
+
+        case TTY:
+            comp = Ape::compareByTTY;
+            break;
+
+        case UCPU:
+            comp = Ape::compareByUCPU;
+            break;
+
+        case SCPU:
+            comp = Ape::compareBySCPU;
+            break;
+
+        case STATE:
+            comp = Ape::compareByState;
+            break;
+
+        case START:
+            comp = Ape::compareByStartTime;
+            break;
     }
-    
+
+    // Stable sort to maintain order when sorting columns such as username
     std::stable_sort(this->processList.begin(), 
                      this->processList.end(),
                      comp);
@@ -134,6 +171,9 @@ int Ape::update()
         else
             totalCPU += it->second->u_cpu + it->second->s_cpu;
     }
+
+    this->system->totalCPU = totalCPU;
+    this->system->updateStat();
 
     return 0;
 }

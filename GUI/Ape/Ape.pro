@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui \
+    svg
 
 QMAKE_CXXFLAGS += -std=c++0x
 
@@ -19,14 +20,20 @@ SOURCES += main.cpp\
     ../../src/Sys.cpp \
     ../../src/Process.cpp \
     ../../src/Ape.cpp \
-    filesinusedialog.cpp
+    filesinusedialog.cpp \
+    aboutdialog.cpp
 
 HEADERS  += mainwindow.h \
     ../../src/Ui.h \
     ../../src/Sys.h \
     ../../src/Process.h \
     ../../src/Ape.h \
-    filesinusedialog.h
+    filesinusedialog.h \
+    aboutdialog.h
 
-FORMS    += mainwindow.ui \
-    filesinusedialog.ui
+FORMS    += filesinusedialog.ui \
+    mainwindow.ui \
+    aboutdialog.ui
+
+OTHER_FILES += \
+    ape.svg
